@@ -1,0 +1,119 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/title.gd" id="1_title"]
+[ext_resource type="AudioStream" path="res://assets/sounds/bgm.mp3" id="2_music"]
+[ext_resource type="PackedScene" path="res://scenes/volume_settings.tscn" id="3_volume"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.16, 0.18, 0.24, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.37, 0.78, 1, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button_hover"]
+bg_color = Color(0.22, 0.26, 0.36, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.37, 0.78, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Title" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_title")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.13, 0.2, 0.12, 1)
+
+[node name="Center" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Box" type="VBoxContainer" parent="Center"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Name" type="Label" parent="Center/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.4, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 14
+theme_override_font_sizes/font_size = 84
+text = "VAMPSULIKE"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Center/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "몰려오는 적 사이에서 3분 동안 살아남으세요"
+horizontal_alignment = 1
+
+[node name="Start" type="Button" parent="Center/Box"]
+custom_minimum_size = Vector2(280, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+focus_mode = 0
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_button")
+theme_override_styles/hover = SubResource("StyleBoxFlat_button_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_button_hover")
+text = "시작"
+
+[node name="StartHint" type="Label" parent="Center/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 18
+text = "Space · Enter · 게임패드 A로도 시작"
+horizontal_alignment = 1
+
+[node name="Controls" type="Label" parent="Center/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.86, 0.9, 0.84, 1)
+theme_override_font_sizes/font_size = 20
+text = "이동  WASD · 방향키 · 게임패드 왼쪽 스틱
+공격  자동
+강화 선택  마우스 클릭 · 게임패드 좌우 + A
+일시정지  Esc · 게임패드 Start"
+horizontal_alignment = 1
+
+[node name="Record" type="Label" parent="Center/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.4, 1)
+theme_override_font_sizes/font_size = 22
+text = "아직 기록이 없어요"
+horizontal_alignment = 1
+
+[node name="VolumeSettings" parent="Center/Box" instance=ExtResource("3_volume")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_music")
+volume_db = -14.0
+autoplay = true
+bus = &"Music"

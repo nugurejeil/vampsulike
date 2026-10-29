@@ -1,0 +1,498 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/ground.gd" id="2_ground"]
+[ext_resource type="PackedScene" path="res://scenes/player.tscn" id="3_player"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="4_hud"]
+[ext_resource type="AudioStream" path="res://assets/sounds/bgm.mp3" id="5_music"]
+[ext_resource type="PackedScene" path="res://scenes/volume_settings.tscn" id="6_volume"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_bg"]
+bg_color = Color(0.12, 0.12, 0.12, 0.85)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.85, 0.25, 0.22, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_bg"]
+bg_color = Color(0.08, 0.1, 0.14, 0.85)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xp_fill"]
+bg_color = Color(0.37, 0.78, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card"]
+bg_color = Color(0.16, 0.18, 0.24, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.37, 0.78, 1, 0.6)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_card_hover"]
+bg_color = Color(0.22, 0.26, 0.36, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.37, 0.78, 1, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_main")
+
+[node name="Ground" type="Node2D" parent="." node_paths=PackedStringArray("target")]
+z_index = -10
+script = ExtResource("2_ground")
+target = NodePath("../Player")
+
+[node name="Gems" type="Node2D" parent="."]
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+
+[node name="Projectiles" type="Node2D" parent="."]
+
+[node name="Effects" type="Node2D" parent="."]
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+stream = ExtResource("5_music")
+volume_db = -14.0
+autoplay = true
+bus = &"Music"
+
+[node name="HUD" type="CanvasLayer" parent="."]
+process_mode = 3
+script = ExtResource("4_hud")
+
+[node name="XpBar" type="ProgressBar" parent="HUD"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 10.0
+grow_horizontal = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_xp_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_xp_fill")
+max_value = 10.0
+show_percentage = false
+
+[node name="HealthBar" type="ProgressBar" parent="HUD"]
+offset_left = 16.0
+offset_top = 22.0
+offset_right = 276.0
+offset_bottom = 48.0
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_bg")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+value = 100.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="HUD/HealthBar"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+text = "체력 100 / 100"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="HUD"]
+offset_left = 288.0
+offset_top = 18.0
+offset_right = 400.0
+offset_bottom = 52.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "Lv 1"
+vertical_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="HUD"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = 14.0
+offset_right = 120.0
+offset_bottom = 66.0
+grow_horizontal = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 40
+text = "3:00"
+horizontal_alignment = 1
+
+[node name="KillLabel" type="Label" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -236.0
+offset_top = 18.0
+offset_right = -16.0
+offset_bottom = 52.0
+grow_horizontal = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+text = "처치 0"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Banner" type="Label" parent="HUD"]
+visible = false
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 84.0
+offset_bottom = 140.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.4, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+
+[node name="MoveHint" type="Label" parent="HUD"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = -46.0
+offset_right = 520.0
+offset_bottom = -14.0
+grow_vertical = 0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "WASD 또는 방향키로 이동 · Esc 일시정지"
+
+[node name="LevelUp" type="Control" parent="HUD"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="HUD/LevelUp"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="HUD/LevelUp"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Box" type="VBoxContainer" parent="HUD/LevelUp/Center"]
+layout_mode = 2
+theme_override_constants/separation = 28
+
+[node name="Title" type="Label" parent="HUD/LevelUp/Center/Box"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 40
+text = "레벨 업! 강화를 하나 고르세요"
+horizontal_alignment = 1
+
+[node name="Cards" type="HBoxContainer" parent="HUD/LevelUp/Center/Box"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Card1" type="Button" parent="HUD/LevelUp/Center/Box/Cards"]
+custom_minimum_size = Vector2(300, 190)
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_card_hover")
+
+[node name="Box" type="VBoxContainer" parent="HUD/LevelUp/Center/Box/Cards/Card1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 18.0
+offset_right = -20.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Tag" type="Label" parent="HUD/LevelUp/Center/Box/Cards/Card1/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.37, 0.78, 1, 1)
+theme_override_font_sizes/font_size = 17
+text = "새 무기"
+
+[node name="Title" type="Label" parent="HUD/LevelUp/Center/Box/Cards/Card1/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "제목"
+
+[node name="Desc" type="Label" parent="HUD/LevelUp/Center/Box/Cards/Card1/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.82, 0.84, 0.88, 1)
+theme_override_font_sizes/font_size = 19
+text = "설명"
+autowrap_mode = 3
+
+[node name="Card2" type="Button" parent="HUD/LevelUp/Center/Box/Cards"]
+custom_minimum_size = Vector2(300, 190)
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_card_hover")
+
+[node name="Box" type="VBoxContainer" parent="HUD/LevelUp/Center/Box/Cards/Card2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 18.0
+offset_right = -20.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Tag" type="Label" parent="HUD/LevelUp/Center/Box/Cards/Card2/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.37, 0.78, 1, 1)
+theme_override_font_sizes/font_size = 17
+text = "새 무기"
+
+[node name="Title" type="Label" parent="HUD/LevelUp/Center/Box/Cards/Card2/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "제목"
+
+[node name="Desc" type="Label" parent="HUD/LevelUp/Center/Box/Cards/Card2/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.82, 0.84, 0.88, 1)
+theme_override_font_sizes/font_size = 19
+text = "설명"
+autowrap_mode = 3
+
+[node name="Card3" type="Button" parent="HUD/LevelUp/Center/Box/Cards"]
+custom_minimum_size = Vector2(300, 190)
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxFlat_card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_card_hover")
+
+[node name="Box" type="VBoxContainer" parent="HUD/LevelUp/Center/Box/Cards/Card3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 18.0
+offset_right = -20.0
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Tag" type="Label" parent="HUD/LevelUp/Center/Box/Cards/Card3/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.37, 0.78, 1, 1)
+theme_override_font_sizes/font_size = 17
+text = "새 무기"
+
+[node name="Title" type="Label" parent="HUD/LevelUp/Center/Box/Cards/Card3/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 28
+text = "제목"
+
+[node name="Desc" type="Label" parent="HUD/LevelUp/Center/Box/Cards/Card3/Box"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.82, 0.84, 0.88, 1)
+theme_override_font_sizes/font_size = 19
+text = "설명"
+autowrap_mode = 3
+
+[node name="Hint" type="Label" parent="HUD/LevelUp/Center/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 20
+text = "마우스로 클릭해서 고르세요"
+horizontal_alignment = 1
+
+[node name="PauseMenu" type="Control" parent="HUD"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="HUD/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Center" type="CenterContainer" parent="HUD/PauseMenu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Box" type="VBoxContainer" parent="HUD/PauseMenu/Center"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="HUD/PauseMenu/Center/Box"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 9
+theme_override_font_sizes/font_size = 56
+text = "일시정지"
+horizontal_alignment = 1
+
+[node name="Resume" type="Button" parent="HUD/PauseMenu/Center/Box"]
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_card_hover")
+text = "재개"
+
+[node name="Restart" type="Button" parent="HUD/PauseMenu/Center/Box"]
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_card_hover")
+text = "다시하기"
+
+[node name="Quit" type="Button" parent="HUD/PauseMenu/Center/Box"]
+custom_minimum_size = Vector2(280, 56)
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_card")
+theme_override_styles/hover = SubResource("StyleBoxFlat_card_hover")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_card_hover")
+text = "종료"
+
+[node name="VolumeSettings" parent="HUD/PauseMenu/Center/Box" instance=ExtResource("6_volume")]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Hint" type="Label" parent="HUD/PauseMenu/Center/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 20
+text = "Esc로 재개"
+horizontal_alignment = 1
+
+[node name="Result" type="Control" parent="HUD"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Dim" type="ColorRect" parent="HUD/Result"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.65)
+
+[node name="Center" type="CenterContainer" parent="HUD/Result"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Box" type="VBoxContainer" parent="HUD/Result/Center"]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="Title" type="Label" parent="HUD/Result/Center/Box"]
+layout_mode = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 13
+theme_override_font_sizes/font_size = 80
+text = "패배"
+horizontal_alignment = 1
+
+[node name="Stats" type="Label" parent="HUD/Result/Center/Box"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "생존 시간 0:00
+처치 0
+도달 레벨 1"
+horizontal_alignment = 1
+
+[node name="Record" type="Label" parent="HUD/Result/Center/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.82, 0.4, 1)
+theme_override_font_sizes/font_size = 22
+text = "최고 기록  생존 0:00 · 처치 0"
+horizontal_alignment = 1
+
+[node name="Hint" type="Label" parent="HUD/Result/Center/Box"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+theme_override_font_sizes/font_size = 20
+text = "Space 또는 Enter로 다시 시작"
+horizontal_alignment = 1

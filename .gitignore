@@ -1,0 +1,18 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+
+# 웹 내보내기 결과물
+/build/
+/web_build/
+*.zip
+
+# 프로젝트 맨 위에 잘못 내보내진 웹 결과물
+/index.html
+/vampsulike.*
+
+# 맥 / 도구 임시 파일
+.DS_Store
+*.sg-rwlock
+.claude/settings.local.json
+.claude/skills/sprite-gen/
